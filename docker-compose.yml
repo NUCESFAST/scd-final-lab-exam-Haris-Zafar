@@ -1,0 +1,51 @@
+version: '3'
+services:
+  event-bus:
+    build:
+      context: ./event-bus
+    ports:
+      - "3885:4009"
+
+  auth:
+    build:
+      context: ./Auth
+    ports:
+      - "3886:4000"
+    depends_on:
+      - mongo
+
+  classroom:
+    build:
+      context: ./Classrooms
+    ports:
+      - "3887:4001"
+    depends_on:
+      - mongo
+
+  post:
+    build:
+      context: ./Post
+    ports:
+      - "3888:4002"
+    depends_on:
+      - mongo
+
+  client:
+    build:
+      context: ./client
+    ports:
+      - "1885:3000"
+    depends_on:
+      - auth
+      - classroom
+      - post
+
+  mongo:
+    image: mongo:4.4.4
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

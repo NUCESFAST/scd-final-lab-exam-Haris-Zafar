@@ -1,18 +1,12 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import cookie from 'react-cookies';
+import React, { useState } from "react";
+import axios from "axios";
+import cookie from "react-cookies";
 
-import Home from '../Home/Home';
-import Posts from '../Posts/Posts';
-import classes from './Auth.module.css';
+import Home from "../Home/Home";
+import Posts from "../Posts/Posts";
+import classes from "./Auth.module.css";
 
-import {
-  Switch,
-  Route,
-  Link,
-  useHistory,
-} from 'react-router-dom';
-
+import { Switch, Route, Link, useHistory } from "react-router-dom";
 
 const Auth = (props) => {
   const [email, setEmail] = useState("");
@@ -23,29 +17,38 @@ const Auth = (props) => {
   const tryLogin = async (e) => {
     e.preventDefault();
 
-    await axios.post('http://localhost:4000/login', {
-      email, password
-    }).then((res) => {
-      cookie.save('userId', res.data, { path: '/' })
-      history.push({pathname: '/home'});
-    }).catch((err) => {
-      console.log(err);
-    });
+    await axios
+      .post("http://localhost:4000/login", {
+        email,
+        password,
+      })
+      .then((res) => {
+        cookie.save("userId", res.data, { path: "/" });
+        history.push({ pathname: "/home" });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     setEmail("");
     setPassword("");
-  }
+  };
 
   const trySignup = async (e) => {
     e.preventDefault();
 
-    await axios.post('http://localhost:4000/signup', {
-      email, username, password
-    }).then((res) => {
-      history.push('/login');
-    }).catch((err) => {
-      console.log(err);
-    })
+    await axios
+      .post("http://localhost:4000/signup", {
+        email,
+        username,
+        password,
+      })
+      .then((res) => {
+        history.push("/login");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     setEmail("");
     setPassword("");
@@ -55,12 +58,15 @@ const Auth = (props) => {
   const navigation = () => {
     return (
       <nav className="nav-links">
-        <Link to="/login" className={classes.navLinks}>Login</Link>
-        <Link to="/signup" className={classes.navLinks}>Signup</Link>
+        <Link to="/login" className={classes.navLinks}>
+          Login
+        </Link>
+        <Link to="/signup" className={classes.navLinks}>
+          Signup
+        </Link>
       </nav>
-    )
-  }
-
+    );
+  };
 
   return (
     <div>
@@ -70,16 +76,17 @@ const Auth = (props) => {
             <input
               value={email}
               type="text"
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="Username"
             />
             <input
               value={password}
               type="password"
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               required
-              placeholder="Password" />
+              placeholder="Password"
+            />
             <button className={classes.submitButtons}>LOGIN</button>
             {navigation()}
           </form>
@@ -89,38 +96,37 @@ const Auth = (props) => {
             <input
               value={email}
               type="text"
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="Email ID"
             />
             <input
               value={username}
               type="text"
-              onChange={e => setUsername(e.target.value)}
+              onChange={(e) => setUsername(e.target.value)}
               required
               placeholder="username"
             />
             <input
               value={password}
               type="password"
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="Password"
             />
             <button className={classes.submitButtons}>SIGN UP</button>
             {navigation()}
           </form>
-
         </Route>
-        <Route path='/home'>
+        <Route path="/home">
           <Home />
         </Route>
-        <Route path='/posts'>
+        <Route path="/posts">
           <Posts />
         </Route>
       </Switch>
     </div>
   );
-}
+};
 
 export default Auth;
